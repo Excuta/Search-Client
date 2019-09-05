@@ -1,7 +1,8 @@
-package com.excuta.searchbar
+package com.excuta.searchbar.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.excuta.searchbar.R
 
 class MainActivity : AppCompatActivity() {
 

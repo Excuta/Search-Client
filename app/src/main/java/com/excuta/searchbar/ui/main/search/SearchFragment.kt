@@ -1,4 +1,4 @@
-package com.excuta.searchbar.ui
+package com.excuta.searchbar.ui.main.search
 
 import android.os.Bundle
 import android.view.*
@@ -11,16 +11,13 @@ import com.excuta.searchbar.R
 import com.excuta.searchbar.ui.extensions.hideKeyboard
 import io.reactivex.Emitter
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Predicate
-import kotlinx.android.synthetic.main.fragment_web_view.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class WebViewFragment : Fragment() {
+class SearchFragment : Fragment() {
 
     private lateinit var searchView: SearchView
     private var disposable: Disposable? = null

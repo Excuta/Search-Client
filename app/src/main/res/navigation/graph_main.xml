@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.excuta.searchbar.ui.WebViewFragment"
+        android:name="com.excuta.searchbar.ui.main.search.SearchFragment"
         android:label="fragment_web_view"
         tools:layout="@layout/fragment_web_view" />
 </navigation>
