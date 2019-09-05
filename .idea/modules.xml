@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SearchBar.iml" filepath="$PROJECT_DIR$/SearchBar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/SearchBar-app.iml" filepath="$PROJECT_DIR$/app/SearchBar-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/projects-SearchBar.iml" filepath="$PROJECT_DIR$/projects-SearchBar.iml" />
     </modules>
   </component>
 </project>
