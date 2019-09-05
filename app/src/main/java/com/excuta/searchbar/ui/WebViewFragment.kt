@@ -41,7 +41,9 @@ class WebViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        queryLiveData.observe(viewLifecycleOwner, Observer { text.text = it })
+        queryLiveData.observe(viewLifecycleOwner, Observer {
+            TODO("send query to view model")
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
