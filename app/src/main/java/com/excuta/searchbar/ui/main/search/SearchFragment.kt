@@ -43,10 +43,14 @@ class SearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        inject()
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[SearchViewModel::class.java]
+    }
+
+    private fun inject() {
         DaggerSearchComponent.builder()
             .presentationComponent(getApplication()?.presentationComponent)
             .build().inject(this)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[SearchViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -60,9 +64,11 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initWebView()
-        queryLiveData.observe(viewLifecycleOwner, Observer {
-            viewModel.getLinkFor(it)
-        })
+        observeQuery()
+        observeLink()
+    }
+
+    private fun observeLink() {
         viewModel.linkLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Success -> {
@@ -78,6 +84,12 @@ class SearchFragment : Fragment() {
         })
     }
 
+    private fun observeQuery() {
+        queryLiveData.observe(viewLifecycleOwner, Observer {
+            viewModel.getLinkFor(it)
+        })
+    }
+
     private fun initWebView() {
         webView.webChromeClient = ProgressChromeClient(progressBar)
         webView.webViewClient = ProgressWebClient(progressBar)
@@ -89,7 +101,11 @@ class SearchFragment : Fragment() {
         val searchItem = menu.findItem(R.id.action_search)
         searchView = searchItem.actionView as SearchView
         disposable?.dispose()
-        disposable = Observable.create(ObservableOnSubscribe<String> {
+        disposable = createSearchDisposable()
+    }
+
+    private fun createSearchDisposable(): Disposable? {
+        return Observable.create(ObservableOnSubscribe<String> {
             searchView.setOnQueryTextListener(createQueryListener(it))
         })
             .filter { !it.isBlank() }
