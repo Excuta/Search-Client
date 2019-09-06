@@ -1,6 +1,9 @@
 package com.excuta.searchclient.ui.main.search
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
+import android.provider.SearchRecentSuggestions
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -9,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.excuta.searchclient.R
+import com.excuta.searchclient.data.suggestions.SuggestionsContentProvider
 import com.excuta.searchclient.extensions.getApplication
 import com.excuta.searchclient.extensions.hideKeyboard
 import com.excuta.searchclient.presentation.Error
@@ -39,12 +43,18 @@ class SearchFragment : Fragment() {
     @field:Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: SearchViewModel
+    lateinit var searchRecentSuggestions: SearchRecentSuggestions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         inject()
         viewModel = ViewModelProviders.of(this, viewModelFactory)[SearchViewModel::class.java]
+        searchRecentSuggestions = SearchRecentSuggestions(
+            context,
+            SuggestionsContentProvider.AUTHORITY,
+            SuggestionsContentProvider.MODE
+        )
     }
 
     private fun inject() {
@@ -72,7 +82,12 @@ class SearchFragment : Fragment() {
         viewModel.linkLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Success -> {
-                    webView.loadUrl(it.data)
+                    it.data?.let { result ->
+                        val link = result.link
+                        webView.loadUrl(link)
+                        searchView.setQuery(link, false)
+                        searchRecentSuggestions.saveRecentQuery(link, result.originalQuery)
+                    }
                 }
                 is Loading -> {
 
@@ -102,6 +117,9 @@ class SearchFragment : Fragment() {
         searchView = searchItem.actionView as SearchView
         disposable?.dispose()
         disposable = createSearchDisposable()
+        val searchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
+        searchView.isQueryRefinementEnabled = true
     }
 
     private fun createSearchDisposable(): Disposable? {
@@ -115,9 +133,11 @@ class SearchFragment : Fragment() {
     private fun createQueryListener(emitter: Emitter<String>): SearchView.OnQueryTextListener {
         return object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) emitter.onNext(query)
+                if (query != null) {
+                    emitter.onNext(query)
+                }
                 hideKeyboard()
-                return true
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {

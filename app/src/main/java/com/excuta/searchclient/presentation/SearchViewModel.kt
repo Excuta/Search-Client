@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.excuta.searchclient.domain.SearchUseCase
 import com.excuta.searchclient.presentation.di.schedulers.SchedulersModule.IO_SCHEDULER
 import com.excuta.searchclient.presentation.di.schedulers.SchedulersModule.MAIN_THREAD_SCHEDULER
+import com.excuta.searchclient.presentation.model.SearchResult
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
@@ -21,8 +22,8 @@ class SearchViewModel
 
     private val compositeDisposable = CompositeDisposable()
 
-    private val _linkLiveData = MutableLiveData<Resource<String>>()
-    val linkLiveData: LiveData<Resource<String>> = _linkLiveData
+    private val _linkLiveData = MutableLiveData<Resource<SearchResult>>()
+    val linkLiveData: LiveData<Resource<SearchResult>> = _linkLiveData
 
     val suggestions = MutableLiveData<Resource<List<String>>>()
 
