@@ -1,7 +1,7 @@
 # Search Client
 
-a good skeleton for a custom browser, it allows to process user query in an extensible manner to allow adding more fuctionality easily
-also, it adds successful queries to suggestions
+A skeleton for a custom browser, it allows to process user query in an extensible manner to allow adding more fuctionality easily
+also, it adds successful queries to suggestions.
 
 ## Technical Overview
 
