@@ -96,7 +96,7 @@ class SearchFragment : Fragment() {
                         val link = result.link
                         webView.loadUrl(link)
                         searchView.setQuery(link, false)
-                        searchRecentSuggestions.saveRecentQuery(link, result.originalQuery)
+                        searchRecentSuggestions.saveRecentQuery(result.originalQuery, link)
                     }
                 }
                 is Loading -> {
