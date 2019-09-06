@@ -1,6 +1,7 @@
 package com.excuta.searchbar.domain.entity.query.processor
 
-class SearchQueryProcessor : QueryProcessor {
+class SearchQueryProcessor
+internal constructor() : QueryProcessor {
 
     private var baseUrl = "https://www.google.com/search?q="
     override fun getUrl(query: String): String {

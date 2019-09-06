@@ -1,14 +1,19 @@
 package com.excuta.searchbar.presentation.di
 
+import com.excuta.searchbar.domain.di.DomainComponent
+import com.excuta.searchbar.presentation.di.schedulers.SchedulersModule
+import com.excuta.searchbar.presentation.di.viewmodel.ViewModelsModule
 import com.excuta.searchbar.presentation.di.viewmodel.factory.ViewModelFactory
-import com.excuta.searchbar.presentation.di.viewmodel.factory.ViewModelFactoryModule
 import dagger.Component
 import javax.inject.Scope
 
 @PresentationScope
-@Component(modules = [ViewModelFactoryModule::class])
+@Component(
+    dependencies = [DomainComponent::class],
+    modules = [ViewModelsModule::class, SchedulersModule::class]
+)
 interface PresentationComponent {
-    fun viewModelFactory():ViewModelFactory
+    fun viewModelFactory(): ViewModelFactory
 }
 
 @Scope

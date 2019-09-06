@@ -2,7 +2,8 @@ package com.excuta.searchbar.domain.entity.query.processor
 
 import com.excuta.searchbar.extensions.validUrl
 
-class LinkQueryProcessor : QueryProcessor {
+class LinkQueryProcessor
+internal constructor() : QueryProcessor {
 
     private val http = "http://"
     private val https = "https://"
