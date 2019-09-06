@@ -1,7 +1,5 @@
 package com.excuta.searchclient.domain.entity.query.processor
 
-import com.excuta.searchclient.extensions.validUrl
-
 class LinkQueryProcessor
 internal constructor() : QueryProcessor {
 
@@ -11,8 +9,7 @@ internal constructor() : QueryProcessor {
         if (!query.startsWith(http) &&
             !query.startsWith(https)
         ) {
-            val url = https + query
-            if (url.validUrl()) return url
+            return https + query
         }
         return query
     }
