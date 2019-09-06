@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 import com.excuta.searchbar.R
-import com.excuta.searchbar.ui.extensions.hideKeyboard
+import com.excuta.searchbar.extensions.hideKeyboard
 import io.reactivex.Emitter
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe

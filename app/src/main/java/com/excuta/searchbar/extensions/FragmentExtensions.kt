@@ -1,4 +1,4 @@
-package com.excuta.searchbar.ui.extensions
+package com.excuta.searchbar.extensions
 
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
