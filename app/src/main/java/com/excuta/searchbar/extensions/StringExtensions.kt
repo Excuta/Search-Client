@@ -1,13 +1,13 @@
 package com.excuta.searchbar.extensions
 
-import java.lang.Exception
-import java.net.URL
+import java.util.regex.Pattern
 
-fun String.validUrl():Boolean{
-    return try{
-        URL(this).toURI()
-        true
-    }catch (ex:Exception){
-        false
-    }
+
+fun String.validUrl(): Boolean {
+    val regex = Pattern.compile(
+        "\\b(?:(https?|ftp|file)://|www\\.)?[-A-Z0-9+&#/%?=~_|$!:,.;]*[A-Z0-9+&@#/%=~_|$]\\.[-A-Z0-9+&@#/%?=~_|$!:,.;]*[A-Z0-9+&@#/%=~_|$]",
+        Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
+    )
+    val regexMatcher = regex.matcher(this)
+    return regexMatcher.matches()
 }
