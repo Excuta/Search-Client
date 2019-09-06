@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -43,7 +44,9 @@ class SearchFragment : Fragment() {
     @field:Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: SearchViewModel
+
     lateinit var searchRecentSuggestions: SearchRecentSuggestions
+    lateinit var provider: SelectedSuggestionProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +79,13 @@ class SearchFragment : Fragment() {
         initWebView()
         observeQuery()
         observeLink()
+        observeSuggestionSelected()
+    }
+
+    private fun observeSuggestionSelected() {
+        provider.getLiveData().observe(viewLifecycleOwner, Observer {
+            searchView.setQuery(it, true)
+        })
     }
 
     private fun observeLink() {
@@ -135,14 +145,28 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     emitter.onNext(query)
+                    searchView.clearFocus()
                 }
                 hideKeyboard()
-                return false
+                return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 return true
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is SelectedSuggestionProvider) {
+            provider = context
+        } else {
+            throw IllegalStateException("Host activity must implement interface")
+        }
+    }
+
+    interface SelectedSuggestionProvider {
+        fun getLiveData(): LiveData<String>
     }
 }

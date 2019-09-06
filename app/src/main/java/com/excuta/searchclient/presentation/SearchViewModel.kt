@@ -25,13 +25,6 @@ class SearchViewModel
     private val _linkLiveData = MutableLiveData<Resource<SearchResult>>()
     val linkLiveData: LiveData<Resource<SearchResult>> = _linkLiveData
 
-    val suggestions = MutableLiveData<Resource<List<String>>>()
-
-
-    fun loadSuggestions(query: String) {
-
-    }
-
     fun getLinkFor(query: String) {
         val disposable = useCase.getLink(query)
             .observeOn(ioScheduler)
