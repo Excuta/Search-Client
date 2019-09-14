@@ -11,17 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.excuta.searchclient.R
 import com.excuta.searchclient.data.suggestions.SuggestionsContentProvider
-import com.excuta.searchclient.extensions.getApplication
 import com.excuta.searchclient.extensions.hideKeyboard
 import com.excuta.searchclient.presentation.Error
 import com.excuta.searchclient.presentation.Loading
 import com.excuta.searchclient.presentation.SearchViewModel
 import com.excuta.searchclient.presentation.Success
-import com.excuta.searchclient.presentation.di.viewmodel.factory.ViewModelFactory
-import com.excuta.searchclient.ui.main.search.di.DaggerSearchComponent
 import com.excuta.searchclient.ui.main.webclient.ProgressChromeClient
 import com.excuta.searchclient.ui.main.webclient.ProgressWebClient
 import io.reactivex.Emitter
@@ -29,7 +25,8 @@ import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_web_view.*
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 /**
@@ -41,29 +38,19 @@ class SearchFragment : Fragment() {
     private var disposable: Disposable? = null
     private val queryLiveData = MutableLiveData<String>()
 
-    @field:Inject
-    lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel { parametersOf("hi") }
 
-    lateinit var searchRecentSuggestions: SearchRecentSuggestions
-    lateinit var provider: SelectedSuggestionProvider
+    private lateinit var searchRecentSuggestions: SearchRecentSuggestions
+    private lateinit var provider: SelectedSuggestionProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        inject()
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[SearchViewModel::class.java]
         searchRecentSuggestions = SearchRecentSuggestions(
             context,
             SuggestionsContentProvider.AUTHORITY,
             SuggestionsContentProvider.MODE
         )
-    }
-
-    private fun inject() {
-        DaggerSearchComponent.builder()
-            .presentationComponent(getApplication()?.presentationComponent)
-            .build().inject(this)
     }
 
     override fun onCreateView(
@@ -103,7 +90,11 @@ class SearchFragment : Fragment() {
 
                 }
                 is Error -> {
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        it.throwable.toString() + it.responseCode?.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })

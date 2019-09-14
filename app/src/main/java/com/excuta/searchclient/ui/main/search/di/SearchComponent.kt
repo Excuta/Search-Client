@@ -1,15 +1,14 @@
 package com.excuta.searchclient.ui.main.search.di
 
-import com.excuta.searchclient.presentation.di.PresentationComponent
-import com.excuta.searchclient.ui.main.search.SearchFragment
-import dagger.Component
-import javax.inject.Scope
+import com.excuta.searchclient.presentation.SearchViewModel
+import com.excuta.searchclient.presentation.di.IO_SCHEDULER
+import com.excuta.searchclient.presentation.di.MAIN_THREAD_SCHEDULER
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@SearchScope
-@Component(dependencies = [PresentationComponent::class])
-interface SearchComponent {
-    fun inject(searchFragment: SearchFragment)
+const val SEARCH_SCOPE = "Search Scope"
+val searchModule = module {
+    viewModel { (string: String) -> SearchViewModel(get(named(MAIN_THREAD_SCHEDULER)),
+        get(named(IO_SCHEDULER)), get(), string) }
 }
-
-@Scope
-annotation class SearchScope

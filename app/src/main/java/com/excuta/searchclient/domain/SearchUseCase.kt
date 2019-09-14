@@ -1,16 +1,13 @@
 package com.excuta.searchclient.domain
 
-import com.excuta.searchclient.domain.di.QueryModule.SEARCH_USECASE_CATEGORIZER
 import com.excuta.searchclient.domain.entity.query.categorizer.QueryCategorizer
 import com.excuta.searchclient.domain.entity.query.processor.QueryProcessor
 import com.excuta.searchclient.presentation.model.SearchResult
 import io.reactivex.Observable
-import javax.inject.Inject
-import javax.inject.Named
 
 
-class SearchUseCase @Inject constructor(
-    @param:Named(SEARCH_USECASE_CATEGORIZER) private val queryCategorizer: QueryCategorizer,
+class SearchUseCase constructor(
+    private val queryCategorizer: QueryCategorizer,
     private val queryProcessorFactory: QueryProcessor.Factory
 ) {
 

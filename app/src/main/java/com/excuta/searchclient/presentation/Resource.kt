@@ -2,8 +2,8 @@ package com.excuta.searchclient.presentation
 
 sealed class Resource<T>(
     var data: T?,
-    throwable: Throwable?,
-    responseCode: Int?
+    var throwable: Throwable?,
+    var responseCode: Int?
 )
 
 class Success<T>(data: T) :
